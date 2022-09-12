@@ -8,12 +8,12 @@ import {HolidayType, SystemMessageType} from "./types";
 import {HolidayTypeSelectField} from "./components/HolidayTypeSelectField";
 
 export default function App() {
+	const [apiKey, setApiKey] = useState("");
 	const [selectedType, setSelectedType] = useState<HolidayType[]>([]);
 	const [searchCountryCode, setSearchCountryCode] = useState({
 		code: "",
 		isValid: false
 	});
-	const [apiKey, setApiKey] = useState("");
 
 	const queryClient = new QueryClient();
 
