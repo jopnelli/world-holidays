@@ -9,7 +9,7 @@ import {HolidayTypeSelectField} from "./components/HolidayTypeSelectField";
 
 export default function App() {
 	const [apiKey, setApiKey] = useState("");
-	const [selectedType, setSelectedType] = useState<HolidayType[]>([]);
+	const [selectedHolidayType, setSelectedHolidayType] = useState<HolidayType[]>([]);
 	const [searchCountryCode, setSearchCountryCode] = useState({
 		code: "",
 		isValid: false
@@ -29,13 +29,12 @@ export default function App() {
 
 				<SearchCountryInputFieldWrapper>
 					<SearchCountryInputField
-						setSearchCountry={setSearchCountryCode}
-					/>
+						setSearchCountry={setSearchCountryCode}/>
 				</SearchCountryInputFieldWrapper>
 
 				<HolidayTypeSelectFieldWrapper>
 					<HolidayTypeSelectField
-						setSelectedType={setSelectedType}/>
+						setSelectedType={setSelectedHolidayType}/>
 				</HolidayTypeSelectFieldWrapper>
 
 			</HolidayTableControlsWrapper>
@@ -50,20 +49,17 @@ export default function App() {
 				client={queryClient}>
 				<HolidayTable
 					country={searchCountryCode.code}
-					holidayTypeFilter={selectedType}
-					apiKey={apiKey}
-				/>
+					holidayTypeFilter={selectedHolidayType}
+					apiKey={apiKey}/>
 			</QueryClientProvider>}
 
-			<ApiKeyInputWrapper
-			>
+			<ApiKeyInputWrapper>
 				<StyledApiKeyInputField
 					type="text"
 					name="api-key-input"
 					placeholder="Enter API Key"
 					onChange={(e) => setApiKey(e.currentTarget.value)}
-					isMissing={!!searchCountryCode.code && !apiKey}
-				/>
+					isMissing={!!searchCountryCode.code && !apiKey}/>
 			</ApiKeyInputWrapper>
 		</Container>
 	); 

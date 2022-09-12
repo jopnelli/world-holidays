@@ -26,26 +26,26 @@ export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: st
 	}, [country, apiKey]);
 
 	const filteredHolidays = useMemo(() => {
-		if(!holidayData) return [];
+		if (!holidayData) return [];
 
 		const holidayTypeFilterValues = holidayTypeFilter.flatMap(t => t.value);
 
-		if(!holidayTypeFilter.length) return holidayData;
+		if (!holidayTypeFilter.length) return holidayData;
 
 		if (holidayTypeFilterValues.includes("Religious")) {
 			const nonReligiousHolidays = holidayTypeOptions.filter(h => h.label !== "Religious").flatMap(h => h.value);
 			return holidayData.filter(h => h.type.some(t => !nonReligiousHolidays.includes(t)));
 		}
+
 		return holidayData.filter(h => h.type.some(t => holidayTypeFilterValues.includes(t)));
 	}, [holidayData, holidayTypeFilter]);
 
-	// could add error response, eg on "auth failed" - invalid api
-	if(status === "error") return (
+	if (status === "error") return (
 		<SystemMessage
 			type={SystemMessageType.ERROR}/>
 	);
 
-	if(status === "loading") return (<StyledTable>
+	if (status === "loading") return (<StyledTable>
 		<table>
 			<thead>
 				<tr>

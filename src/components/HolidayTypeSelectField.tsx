@@ -51,7 +51,6 @@ export function HolidayTypeSelectField({setSelectedType}: { setSelectedType: Dis
 	/>;
 }
 
-// everything that's not one of the first three will be colored as religious - I didn't validate that assumption
 export const holidayTypeOptions = [
 	{
 		value: ["National holiday"],
