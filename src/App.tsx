@@ -1,21 +1,19 @@
-import {HolidayTable} from "./HolidayTable";
-import {QueryClientProvider, QueryClient} from "react-query";
+import {HolidayTable} from "./components/HolidayTable";
+import {QueryClient, QueryClientProvider} from "react-query";
 import styled from "styled-components";
 import {useState} from "react";
-import {supportedCountryNames} from "./supportedCountries";
-import {SearchCountryInputField} from "./SearchCountryInputField";
-import {SystemMessage} from "./SystemMessage";
+import {SearchCountryInputField, InputFieldStyled} from "./components/SearchCountryInputField";
+import {SystemMessage} from "./components/SystemMessage";
 import {HolidayType, SystemMessageType} from "./types";
-import {HolidayTypeSelectField} from "./HolidayTypeSelectField";
+import {HolidayTypeSelectField} from "./components/HolidayTypeSelectField";
 
-// TODO: fix styling
-// TODO: add api key input
 export default function App() {
 	const [selectedType, setSelectedType] = useState<HolidayType[]>([]);
 	const [searchCountryCode, setSearchCountryCode] = useState({
 		code: "",
 		isValid: false
 	});
+	const [apiKey, setApiKey] = useState("");
 
 	const queryClient = new QueryClient();
 
@@ -28,38 +26,43 @@ export default function App() {
 			</header>
 
 			<HolidayTableControlsWrapper>
+
 				<SearchCountryInputFieldWrapper>
 					<SearchCountryInputField
-						suggestions={supportedCountryNames}
 						setSearchCountry={setSearchCountryCode}
 					/>
 				</SearchCountryInputFieldWrapper>
+
 				<HolidayTypeSelectFieldWrapper>
 					<HolidayTypeSelectField
 						setSelectedType={setSelectedType}/>
 				</HolidayTypeSelectFieldWrapper>
+
 			</HolidayTableControlsWrapper>
 
 			{!searchCountryCode.code && <SystemMessage
 				type={SystemMessageType.EMPTY}/>}
 
-			{searchCountryCode.code && !searchCountryCode.isValid && <SystemMessage
-				type={SystemMessageType.ERROR}/>}
+			{searchCountryCode.code && !apiKey && <SystemMessage
+				type={SystemMessageType.API}/>}
 
-			{searchCountryCode.code && searchCountryCode.isValid && <QueryClientProvider
+			{apiKey && searchCountryCode.code && searchCountryCode.isValid && <QueryClientProvider
 				client={queryClient}>
 				<HolidayTable
 					country={searchCountryCode.code}
 					holidayTypeFilter={selectedType}
+					apiKey={apiKey}
 				/>
 			</QueryClientProvider>}
 
-			<ApiKeyInputWrapper>
-				<StyledInputField
+			<ApiKeyInputWrapper
+			>
+				<StyledApiKeyInputField
 					type="text"
 					name="api-key-input"
-					placeholder="Override API KEY"
-					onChange={(e) => console.log(e.currentTarget.value)}
+					placeholder="Enter API Key"
+					onChange={(e) => setApiKey(e.currentTarget.value)}
+					isMissing={!!searchCountryCode.code && !apiKey}
 				/>
 			</ApiKeyInputWrapper>
 		</Container>
@@ -67,34 +70,32 @@ export default function App() {
 }
 
 const Container = styled.div`
-	position: relative;
 	padding-bottom: 30px;
 	height: 100%;
 `;
 
 const HolidayTableControlsWrapper = styled.div`
 	display: flex;
-	gap: 20px;
+	gap: 30px;
 	margin-bottom: 20px;
 `;
 
-const SearchCountryInputFieldWrapper = styled.div`
-	width: 300px;
-	height: 38px;
+const StyledApiKeyInputField = styled(InputFieldStyled)<{isMissing: boolean}>`
+	border: ${p => p.isMissing ? "3px solid red" : "1px solid hsl(0, 0%, 80%)"};
 `;
 
-const StyledInputField = styled.input`
+const SearchCountryInputFieldWrapper = styled.div`
+	position: relative;
 `;
 
 const HolidayTypeSelectFieldWrapper = styled.div`
-	border-radius: 10px;
-	border-width: 1px;
-	width: 250px;
+	& #react-select-2-placeholder {
+		font-size: 14px;
+	}
 `;
 
 const ApiKeyInputWrapper = styled.div`
-	position: absolute;
-	bottom: 10px;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	padding: 30px;
+	display: flex;
+	justify-content: center;
 `;

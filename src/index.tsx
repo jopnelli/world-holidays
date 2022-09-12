@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 const PageWrapper = styled.div`
     display: flex;
-    height: 50vh;
+    min-height: 50vh;
     flex-direction: column;
     justify-content: space-between;
 	padding: 30px;

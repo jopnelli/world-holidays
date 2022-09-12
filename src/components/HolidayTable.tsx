@@ -1,20 +1,19 @@
 import {useQuery} from "react-query";
-import {API_KEY} from "./API_KEY";
-import {HolidayItem, HolidayType, SystemMessageType} from "./types";
-import styled from "styled-components";
+import {HolidayItem, HolidayType, SystemMessageType} from "../types";
+import styled, {keyframes} from "styled-components";
 import {SystemMessage} from "./SystemMessage";
 import {useEffect, useMemo, useState} from "react";
 import {holidayTypeOptions} from "./HolidayTypeSelectField";
 
-const year = "2022";
+const year = new Date().getFullYear().toString();
 const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
 
-export function HolidayTable({country, holidayTypeFilter}: { country: string, holidayTypeFilter: HolidayType[] }) {
+export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: string, holidayTypeFilter: HolidayType[], apiKey: string }) {
 	const [holidayData, setHolidayData] = useState<HolidayItem[]>();
 
 	function getHolidays({country, year}: { country: string, year: string }) {
 		return useQuery(["holidays"], async () => {
-			const res = await fetch(`https://calendarific.com/api/v2/holidays?api_key=${API_KEY}&country=${country}&year=${year}`);
+			const res = await fetch(`https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`);
 			const data = await res.json();
 			return removeDuplicateHolidays(data.response.holidays);
 		}, {enabled: false, onSuccess: setHolidayData});
@@ -24,7 +23,7 @@ export function HolidayTable({country, holidayTypeFilter}: { country: string, ho
 
 	useEffect(() => {
 		refetch();
-	}, [country]);
+	}, [country, apiKey]);
 
 	const filteredHolidays = useMemo(() => {
 		if(!holidayData) return [];
@@ -40,15 +39,40 @@ export function HolidayTable({country, holidayTypeFilter}: { country: string, ho
 		return holidayData.filter(h => h.type.some(t => holidayTypeFilterValues.includes(t)));
 	}, [holidayData, holidayTypeFilter]);
 
+	// could add error response, eg on "auth failed" - invalid api
 	if(status === "error") return (
 		<SystemMessage
 			type={SystemMessageType.ERROR}/>
 	);
 
-	if(status === "loading") return (
-		<SystemMessage
-			type={SystemMessageType.LOADING}/>
-	);
+	if(status === "loading") return (<StyledTable>
+		<table>
+			<thead>
+				<tr>
+					{headers.map((h, i) => {
+						return (
+							<th
+								key={i}>
+								{h}
+							</th>);
+					})}
+				</tr>
+			</thead>
+			<tbody>
+				{[...Array(5)].map((e, i) => {
+					return (
+						<tr
+							key={i}>
+							<td><LoadingStateSkeleton/></td>
+							<td><LoadingStateSkeleton/></td>
+							<td><LoadingStateSkeleton/></td>
+							<td><HolidayTypeTableCell><LoadingStateSkeleton/><LoadingStateSkeleton/></HolidayTypeTableCell></td>
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	</StyledTable>);
 
 	return <>
 		{status === "success" && holidayData && <StyledTable>
@@ -73,13 +97,14 @@ export function HolidayTable({country, holidayTypeFilter}: { country: string, ho
 								<td>{h.name}</td>
 								<td>{date.toString().substring(4, 10)}</td>
 								<td>{h.description}</td>
-								<td>{h.type.map((t, i) => {
+
+								<td><HolidayTypeTableCell>{h.type.map((t, i) => {
 									const holidayTypeOption = holidayTypeOptions.find(ht => ht.value.includes(t)) || holidayTypeOptions[3];
 									return <StyledHolidayType
 										key={i}
 										color={holidayTypeOption.color}
 									>{holidayTypeOption.label}</StyledHolidayType>;
-								})}</td>
+								})}</HolidayTypeTableCell></td>
 							</tr>
 						);
 					})}
@@ -97,9 +122,9 @@ function removeDuplicateHolidays(holidays: HolidayItem[]) {
 const StyledTable = styled.div`
 	border: 1px solid #c5cfdc;
 	border-radius: 10px;
-	max-width: 80vw;
 	
 	table {
+		width: 100%;
 		border-collapse: collapse;
 		border-radius: 10px;
 		
@@ -120,9 +145,8 @@ const StyledTable = styled.div`
 		font-weight: 600;
 	}
 	
-	td:last-child {
-		display: flex;
-		gap: 10px;
+	td:nth-child(2) {
+		white-space: nowrap;
 	}
 	
 	thead, tr:nth-child(even) {
@@ -150,3 +174,20 @@ const StyledHolidayType = styled.span<{color: string}>`
 	height: fit-content;
 `;
 
+const loadingAnimation = keyframes`
+ 0% { background-color: #D3D3D3 }
+ 50% { background-color: #EBECF0; opacity: 1 }
+ 100% { background-color: #949494; opacity: 0.6; }
+`;
+
+const LoadingStateSkeleton = styled.div`
+	height: 10px;
+	background: grey;
+	min-width: 40px;
+	animation: ${loadingAnimation} 2s linear infinite alternate;
+`;
+
+const HolidayTypeTableCell = styled.div`
+	display: flex;
+	gap: 10px;
+`;

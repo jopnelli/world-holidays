@@ -1,4 +1,4 @@
-import {HolidayType} from "./types";
+import {HolidayType} from "../types";
 import Select, {StylesConfig} from "react-select";
 import {Dispatch, SetStateAction} from "react";
 import chroma from "chroma-js";
@@ -13,7 +13,7 @@ export function HolidayTypeSelectField({setSelectedType}: { setSelectedType: Dis
 				height: "inherit",
 			};
 		},
-		option: (styles, { data, isFocused, isSelected }) => {
+		option: (styles, { data, isFocused }) => {
 			const color = chroma(data.color);
 			return {
 				...styles,

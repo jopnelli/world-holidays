@@ -1,4 +1,9 @@
-body {
- font-family: Helvetica;
+* {
+ font-family: Helvetica Neue, sans-serif;
+}
+
+::placeholder {
+    font-size: 14px;
+    color: hsl(0, 0%, 50%);
 }
 

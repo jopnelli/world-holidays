@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {SystemMessageType} from "./types";
+import {SystemMessageType} from "../types";
 
 export function SystemMessage({type}: { type: SystemMessageType }) {
 
@@ -16,16 +16,16 @@ export function SystemMessage({type}: { type: SystemMessageType }) {
 const systemMessageData = {
 	[SystemMessageType.EMPTY]: {
 		title: "Welcome!",
-		description: "Start typing a country in the search box above to load holidays.",
+		description: "Start typing a country in the search box above to load holidays."
+	},
+	[SystemMessageType.API]: {
+		title: "Missing API Key.",
+		description: "Please enter your API Key below."
 	},
 	[SystemMessageType.ERROR]: {
 		title: "Oh no!",
-		description: "Something went wrong. Please try again.",
+		description: "Something went wrong. Please try again."
 	},
-	[SystemMessageType.LOADING]: {
-		title: "Loading holidays...",
-		description: "Your results will be here soon.",
-	}
 };
 
 const SystemMessageWrapper = styled.div`
@@ -33,7 +33,7 @@ const SystemMessageWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    height: 100%;
+    margin: 200px 0;
 `;
 
 const SystemMessageTitle = styled.div`

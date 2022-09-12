@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction, useEffect} from "react";
 import {useState} from "react";
-import "./SearchCountryInputField.css";
-import {supportedCountries, supportedCountryCodes, supportedCountryNames} from "./supportedCountries";
+import {supportedCountries, supportedCountryCodes, supportedCountryNames} from "../supportedCountries";
+import styled from "styled-components";
 
 type AutocompleteState = {
     activeSuggestion: number,
@@ -10,8 +10,7 @@ type AutocompleteState = {
     userInput: string
 }
 
-// TODO: replace suggestions with direct link to supportedCountryNames
-export function SearchCountryInputField({suggestions, setSearchCountry}: { suggestions: string[], setSearchCountry: Dispatch<SetStateAction<{ code: string; isValid: boolean; }>> }) {
+export function SearchCountryInputField({ setSearchCountry}: { setSearchCountry: Dispatch<SetStateAction<{ code: string; isValid: boolean; }>> }) {
 	const [autocompleteState, setAutocompleteState] = useState<AutocompleteState>({
 		activeSuggestion: 0,
 		filteredSuggestions: [],
@@ -31,7 +30,7 @@ export function SearchCountryInputField({suggestions, setSearchCountry}: { sugge
 	function onChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const userInput = e.currentTarget.value;
 
-		const filteredSuggestions = suggestions
+		const filteredSuggestions = supportedCountryNames
 			.filter(s => s.toLowerCase().indexOf(userInput.toLowerCase()) > -1);
 
 		setAutocompleteState({
@@ -85,38 +84,30 @@ export function SearchCountryInputField({suggestions, setSearchCountry}: { sugge
 	if (autocompleteState.showSuggestions && autocompleteState.userInput) {
 		if (autocompleteState.filteredSuggestions.length) {
 			suggestionsListComponent = (
-				<ul
-					className="suggestions">
-					{autocompleteState.filteredSuggestions.map((suggestion, index) => {
-						let className;
-
-						if (index === autocompleteState.activeSuggestion) {
-							className = "suggestion-active";
-						}
+				<StyledList>
+					{autocompleteState.filteredSuggestions.map((suggestion) => {
 						return (
-							<li
-								className={className}
+							<StyledListItem
 								key={suggestion}
 								onClick={onClick}>
 								{suggestion}
-							</li>
+							</StyledListItem>
 						);
 					})}
-				</ul>
+				</StyledList>
 			);
 		} else {
 			suggestionsListComponent = (
-				<div
-					className="no-suggestions">
+				<NoSuggestionsStyled>
 					<em>No suggestions available.</em>
-				</div>
+				</NoSuggestionsStyled>
 			);
 		}
 	}
 
 	return (
 		<>
-			<input
+			<InputFieldStyled
 				type="text"
 				placeholder="Start typing to search country..."
 				onChange={onChange}
@@ -136,3 +127,51 @@ function findCountryCode(input: string) {
 	if (input.length === 2) return input.toLowerCase();
 	return supportedCountries.find(c => c.name === input)!.iso.toLowerCase();
 }
+
+const StyledList = styled.ul`
+	border: 1px solid #c5cfdc;
+	border-top-width: 0;
+	border-radius: 0 0 5px 5px;
+	list-style: none;
+	margin-top: 3px;
+	max-height: 143px;
+	overflow-y: auto;
+	padding-left: 0;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 14px;
+	
+	position: absolute;
+	top: 38px;
+	left: 0;
+`;
+
+const StyledListItem = styled.li`
+	padding: 0.5rem;
+
+	&:hover {
+	 background-color: #f9fbfc;
+	 cursor: pointer;
+	 font-weight: 700;
+ }
+	
+	&:not(:last-of-type) {
+		border-bottom: 1px solid #c5cfdc;
+	}
+`;
+
+const NoSuggestionsStyled = styled.div`
+	color: #c5cfdc;
+	font-size: 14px;
+	padding: 5px 0;
+`;
+
+export const InputFieldStyled = styled.input`
+	border-radius: 4px;
+	border: 1px solid hsl(0, 0%, 80%);
+	width: 300px;
+	height: 38px;
+	font-size: 14px;
+	padding-left: 10px;
+	box-sizing: border-box;
+`;
