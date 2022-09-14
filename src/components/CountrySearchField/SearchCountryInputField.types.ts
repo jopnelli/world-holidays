@@ -1,6 +1,6 @@
 export type AutocompleteState = {
-    activeSuggestion: number,
-    filteredSuggestions: string[],
-    showSuggestions: boolean,
-    userInput: string
-}
+  activeSuggestion: number;
+  filteredSuggestions: string[];
+  showSuggestions: boolean;
+  userInput: string;
+};

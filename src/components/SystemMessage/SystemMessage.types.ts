@@ -1,5 +1,5 @@
 export enum SystemMessageType {
-    EMPTY = "EMPTY",
-    API = "API",
-    ERROR = "ERROR",
+  EMPTY = "EMPTY",
+  API = "API",
+  ERROR = "ERROR",
 }
