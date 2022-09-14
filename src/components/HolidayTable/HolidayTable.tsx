@@ -12,11 +12,13 @@ const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
 export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: string, holidayTypeFilter: HolidayType[], apiKey: string }) {
 	const [holidayData, setHolidayData] = useState<HolidayItem[]>();
 
-	const {status, refetch} = useQuery(["holidays", apiKey, country, year], async () => {
+	const fetchHolidays = async () => {
 		const res = await fetch(`https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`);
 		const data = await res.json();
 		return removeDuplicateHolidays(data.response.holidays);
-	}, {enabled: false, onSuccess: setHolidayData, staleTime: 600000});
+	};
+
+	const {status, refetch} = useQuery(["holidays", apiKey, country, year], fetchHolidays, {enabled: false, onSuccess: setHolidayData, staleTime: 600000});
 
 	useEffect(() => {
 		refetch();

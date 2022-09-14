@@ -1,7 +1,6 @@
 import React from "react";
 import {ApiKeyInputFieldStyled, ApiKeyInputWrapper} from "./ApiKeyInput.styled";
 
-
 export function ApiKeyInput({setApiKey, isMissing}: { setApiKey: React.Dispatch<React.SetStateAction<string>>, isMissing: boolean }) {
 
 	return (

@@ -1,6 +1,5 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {supportedCountries, supportedCountryCodes, supportedCountryNames} from "../../supportedCountries";
-import styled from "styled-components";
 import {
 	InputFieldStyled,
 	NoSuggestionsStyled,
