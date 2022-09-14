@@ -1,15 +1,18 @@
-import styled from "styled-components";
-import {SystemMessageType} from "../types";
+import {SystemMessageType} from "./SystemMessage.types";
+import {SystemMessageDescription, SystemMessageTitle, SystemMessageWrapper} from "./SystemMessage.styled";
 
 export function SystemMessage({type}: { type: SystemMessageType }) {
 
 	return <SystemMessageWrapper>
+
 		<SystemMessageTitle>
 			{systemMessageData[type].title}
 		</SystemMessageTitle>
+
 		<SystemMessageDescription>
 			{systemMessageData[type].description}
 		</SystemMessageDescription>
+
 	</SystemMessageWrapper>;
 }
 
@@ -28,20 +31,3 @@ const systemMessageData = {
 	},
 };
 
-const SystemMessageWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    margin: 200px 0;
-`;
-
-const SystemMessageTitle = styled.div`
-    font-weight: 500;
-    font-size: 24px;
-    margin-bottom: 1rem;
-`;
-
-const SystemMessageDescription = styled.div`
-    font-size: 14px;
-`;

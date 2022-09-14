@@ -3,9 +3,9 @@
 
 /build
 
-/src/API_KEY.ts
-/src/DUMMY_DATA.ts
-/src/getSupportedCountries.ts
+/src/components/helpers/API_KEY.ts
+/src/components/helpers/DUMMY_DATA.ts
+/src/components/helpers/getSupportedCountries.ts
 
 package-lock.json
 .eslintrc.js

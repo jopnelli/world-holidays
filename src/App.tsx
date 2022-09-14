@@ -1,11 +1,13 @@
-import {HolidayTable} from "./components/HolidayTable";
+import {HolidayTable} from "./components/HolidayTable/HolidayTable";
 import {QueryClient, QueryClientProvider} from "react-query";
 import styled from "styled-components";
 import {useState} from "react";
-import {SearchCountryInputField, InputFieldStyled} from "./components/SearchCountryInputField";
-import {SystemMessage} from "./components/SystemMessage";
-import {HolidayType, SystemMessageType} from "./types";
-import {HolidayTypeSelectField} from "./components/HolidayTypeSelectField";
+import {SearchCountryInputField} from "./components/CountrySearchField/SearchCountryInputField";
+import {SystemMessage} from "./components/SystemMessage/SystemMessage";
+import {SystemMessageType} from "./components/SystemMessage/SystemMessage.types";
+import {HolidayType} from "./components/HolidayTable/HolidayTable.types";
+import {HolidayTypeSelectField} from "./components/HolidayTypeFilter/HolidayTypeSelectField";
+import {ApiKeyInput} from "./components/ApiKeyInput/ApiKeyInput";
 
 export default function App() {
 	const [apiKey, setApiKey] = useState("");
@@ -21,21 +23,17 @@ export default function App() {
 		<Container>
 			<header>
 				<h1>
-            Holidays across the world
+					Holidays across the world
 				</h1>
 			</header>
 
 			<HolidayTableControlsWrapper>
 
-				<SearchCountryInputFieldWrapper>
-					<SearchCountryInputField
-						setSearchCountry={setSearchCountryCode}/>
-				</SearchCountryInputFieldWrapper>
+				<SearchCountryInputField
+					setSearchCountry={setSearchCountryCode}/>
 
-				<HolidayTypeSelectFieldWrapper>
-					<HolidayTypeSelectField
-						setSelectedType={setSelectedHolidayType}/>
-				</HolidayTypeSelectFieldWrapper>
+				<HolidayTypeSelectField
+					setSelectedType={setSelectedHolidayType}/>
 
 			</HolidayTableControlsWrapper>
 
@@ -53,14 +51,11 @@ export default function App() {
 					apiKey={apiKey}/>
 			</QueryClientProvider>}
 
-			<ApiKeyInputWrapper>
-				<StyledApiKeyInputField
-					type="text"
-					name="api-key-input"
-					placeholder="Enter API Key"
-					onChange={(e) => setApiKey(e.currentTarget.value)}
-					isMissing={!!searchCountryCode.code && !apiKey}/>
-			</ApiKeyInputWrapper>
+
+			<ApiKeyInput
+				setApiKey={setApiKey}
+				isMissing={!!searchCountryCode.code && !apiKey}/>
+
 		</Container>
 	); 
 }
@@ -76,22 +71,5 @@ const HolidayTableControlsWrapper = styled.div`
 	margin-bottom: 20px;
 `;
 
-const StyledApiKeyInputField = styled(InputFieldStyled)<{isMissing: boolean}>`
-	border: ${p => p.isMissing ? "3px solid red" : "1px solid hsl(0, 0%, 80%)"};
-`;
 
-const SearchCountryInputFieldWrapper = styled.div`
-	position: relative;
-`;
 
-const HolidayTypeSelectFieldWrapper = styled.div`
-	& #react-select-2-placeholder {
-		font-size: 14px;
-	}
-`;
-
-const ApiKeyInputWrapper = styled.div`
-	padding: 30px;
-	display: flex;
-	justify-content: center;
-`;

@@ -1,7 +1,8 @@
-import {HolidayType} from "../types";
+import {HolidayType} from "../HolidayTable/HolidayTable.types";
 import Select, {StylesConfig} from "react-select";
 import {Dispatch, SetStateAction} from "react";
 import chroma from "chroma-js";
+import {HolidayTypeSelectFieldWrapper} from "./HolidayTypeSelectField.styled";
 
 export function HolidayTypeSelectField({setSelectedType}: { setSelectedType: Dispatch<SetStateAction<HolidayType[]>> }){
 	const colourStyles: StylesConfig<HolidayType> = {
@@ -38,17 +39,19 @@ export function HolidayTypeSelectField({setSelectedType}: { setSelectedType: Dis
 		}),
 	};
 
-	return <Select
-		isMulti
-		closeMenuOnSelect={false}
-		styles={colourStyles}
-		placeholder="Select holiday type..."
-		options={holidayTypeOptions}
-		onChange={(newValue) => {
-			console.log(newValue);
-			setSelectedType(newValue as HolidayType[]);
-		}}
-	/>;
+	return (<HolidayTypeSelectFieldWrapper>
+		<Select
+			isMulti
+			closeMenuOnSelect={false}
+			styles={colourStyles}
+			placeholder="Select holiday type..."
+			options={holidayTypeOptions}
+			onChange={(newValue) => {
+				console.log(newValue);
+				setSelectedType(newValue as HolidayType[]);
+			}}
+		/>
+	</HolidayTypeSelectFieldWrapper>);
 }
 
 export const holidayTypeOptions = [

@@ -1,9 +1,10 @@
 import {useQuery} from "react-query";
-import {HolidayItem, HolidayType, SystemMessageType} from "../types";
-import styled, {keyframes} from "styled-components";
-import {SystemMessage} from "./SystemMessage";
+import {SystemMessageType} from "../SystemMessage/SystemMessage.types";
+import {SystemMessage} from "../SystemMessage/SystemMessage";
 import {useEffect, useMemo, useState} from "react";
-import {holidayTypeOptions} from "./HolidayTypeSelectField";
+import {holidayTypeOptions} from "../HolidayTypeFilter/HolidayTypeSelectField";
+import {HolidayTypeStyled, HolidayTypeTableCell, LoadingStateSkeleton, TableStyled} from "./HolidayTable.styled";
+import {HolidayItem, HolidayType} from "./HolidayTable.types";
 
 const year = new Date().getFullYear().toString();
 const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
@@ -11,19 +12,15 @@ const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
 export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: string, holidayTypeFilter: HolidayType[], apiKey: string }) {
 	const [holidayData, setHolidayData] = useState<HolidayItem[]>();
 
-	function getHolidays({country, year}: { country: string, year: string }) {
-		return useQuery(["holidays"], async () => {
-			const res = await fetch(`https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`);
-			const data = await res.json();
-			return removeDuplicateHolidays(data.response.holidays);
-		}, {enabled: false, onSuccess: setHolidayData});
-	}
-
-	const {status, refetch} = getHolidays({country, year});
+	const {status, refetch} = useQuery(["holidays", apiKey, country, year], async () => {
+		const res = await fetch(`https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`);
+		const data = await res.json();
+		return removeDuplicateHolidays(data.response.holidays);
+	}, {enabled: false, onSuccess: setHolidayData, staleTime: 600000});
 
 	useEffect(() => {
 		refetch();
-	}, [country, apiKey]);
+	}, [country, apiKey, refetch]);
 
 	const filteredHolidays = useMemo(() => {
 		if (!holidayData) return [];
@@ -45,7 +42,7 @@ export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: st
 			type={SystemMessageType.ERROR}/>
 	);
 
-	if (status === "loading") return (<StyledTable>
+	if (status === "loading") return (<TableStyled>
 		<table>
 			<thead>
 				<tr>
@@ -72,10 +69,10 @@ export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: st
 				})}
 			</tbody>
 		</table>
-	</StyledTable>);
+	</TableStyled>);
 
 	return <>
-		{status === "success" && holidayData && <StyledTable>
+		{status === "success" && holidayData && <TableStyled>
 			<table>
 				<thead>
 					<tr>
@@ -99,18 +96,18 @@ export function HolidayTable({country, holidayTypeFilter, apiKey}: { country: st
 								<td>{h.description}</td>
 
 								<td><HolidayTypeTableCell>{h.type.map((t, i) => {
-									const holidayTypeOption = holidayTypeOptions.find(ht => ht.value.includes(t)) || holidayTypeOptions[3];
-									return <StyledHolidayType
+									const holidayTypeOption = holidayTypeOptions.find(ht => ht.value.includes(t)) || holidayTypeOptions.find(o => o.label === "Religious")!;
+									return <HolidayTypeStyled
 										key={i}
 										color={holidayTypeOption.color}
-									>{holidayTypeOption.label}</StyledHolidayType>;
+									>{holidayTypeOption.label}</HolidayTypeStyled>;
 								})}</HolidayTypeTableCell></td>
 							</tr>
 						);
 					})}
 				</tbody>
 			</table>
-		</StyledTable>}
+		</TableStyled>}
 	</>;
 }
 
@@ -119,75 +116,3 @@ function removeDuplicateHolidays(holidays: HolidayItem[]) {
 		index === holidays.findIndex((h2) => h2.name === h.name));
 }
 
-const StyledTable = styled.div`
-	border: 1px solid #c5cfdc;
-	border-radius: 10px;
-	
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		border-radius: 10px;
-		
-		font-weight: 400;
-		font-size: 0.9rem;
-	}
-	
-	thead, th {
-		border-bottom: 1px solid #c5cfdc;
-	}
-	
-	th, td {
-		padding: 15px;
-		text-align: left;
-	}
-	
-	td:first-child {
-		font-weight: 600;
-	}
-	
-	td:nth-child(2) {
-		white-space: nowrap;
-	}
-	
-	thead, tr:nth-child(even) {
-		background-color: #f9fbfc;
-	}
-
-	th:first-child {
-		border-top-left-radius: 10px;
-	}
-	th:last-child {
-		border-top-right-radius: 10px;
-	}
-	tr:last-child td:first-child {
-		border-bottom-left-radius: 10px;
-	}
-	tr:last-child td:last-child {
-		border-bottom-right-radius: 10px;
-	}
-`;
-
-const StyledHolidayType = styled.span<{color: string}>`
-	background-color: ${props => props.color};
-	padding: 6px;
-	border-radius: 3px;
-	height: fit-content;
-`;
-
-const loadingAnimation = keyframes`
- 0% { background-color: #D3D3D3 }
- 50% { background-color: #EBECF0; opacity: 1 }
- 100% { background-color: #949494; opacity: 0.6; }
-`;
-
-const LoadingStateSkeleton = styled.div`
-	height: 10px;
-	background: grey;
-	min-width: 40px;
-	animation: ${loadingAnimation} 2s linear infinite alternate;
-`;
-
-const HolidayTypeTableCell = styled.div`
-	display: flex;
-	gap: 10px;
-`;
