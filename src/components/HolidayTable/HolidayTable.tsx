@@ -34,15 +34,11 @@ export function HolidayTable({
     return removeDuplicateHolidays(data.response.holidays);
   };
 
-  const { status, refetch } = useQuery(
+  const { status } = useQuery(
     ["holidays", apiKey, country, year],
     fetchHolidays,
-    { enabled: false, onSuccess: setHolidayData, staleTime: 600000 }
+    { onSuccess: setHolidayData, staleTime: 600000 }
   );
-
-  useEffect(() => {
-    refetch();
-  }, [country, apiKey, refetch]);
 
   const filteredHolidays = useMemo(() => {
     if (!holidayData) return [];
