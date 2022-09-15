@@ -19,10 +19,12 @@ export function HolidayTable({
   country,
   holidayTypeFilter,
   apiKey,
+  isEnabled,
 }: {
   country: string;
   holidayTypeFilter: HolidayType[];
   apiKey: string;
+  isEnabled: boolean;
 }) {
   const fetchHolidays = async () => {
     const res = await fetch(
@@ -38,8 +40,13 @@ export function HolidayTable({
     {
       select: (data) => filterHolidays(data, holidayTypeFilter),
       staleTime: STALE_TIME,
+      enabled: isEnabled,
     }
   );
+
+  if (!country) return <SystemMessage type={SystemMessageType.EMPTY} />;
+
+  if (!apiKey) return <SystemMessage type={SystemMessageType.API} />;
 
   if (isError) return <SystemMessage type={SystemMessageType.ERROR} />;
 

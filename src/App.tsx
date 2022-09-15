@@ -4,8 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import styled from "styled-components";
 import { useState } from "react";
 import { SearchCountryInputField } from "./components/CountrySearchField/SearchCountryInputField";
-import { SystemMessage } from "./components/SystemMessage/SystemMessage";
-import { SystemMessageType } from "./components/SystemMessage/SystemMessage.types";
 import { HolidayType } from "./components/HolidayTable/HolidayTable.types";
 import { HolidayTypeSelectField } from "./components/HolidayTypeFilter/HolidayTypeSelectField";
 import { ApiKeyInput } from "./components/ApiKeyInput/ApiKeyInput";
@@ -34,23 +32,14 @@ export default function App() {
         <HolidayTypeSelectField setSelectedType={setSelectedHolidayType} />
       </HolidayTableControlsWrapper>
 
-      {!searchCountryCode.code && (
-        <SystemMessage type={SystemMessageType.EMPTY} />
-      )}
-
-      {searchCountryCode.code && !apiKey && (
-        <SystemMessage type={SystemMessageType.API} />
-      )}
-
-      {apiKey && searchCountryCode.code && searchCountryCode.isValid && (
-        <QueryClientProvider client={queryClient}>
-          <HolidayTable
-            country={searchCountryCode.code}
-            holidayTypeFilter={selectedHolidayType}
-            apiKey={apiKey}
-          />
-        </QueryClientProvider>
-      )}
+      <QueryClientProvider client={queryClient}>
+        <HolidayTable
+          country={searchCountryCode.code}
+          holidayTypeFilter={selectedHolidayType}
+          apiKey={apiKey}
+          isEnabled={!!apiKey.length && searchCountryCode.isValid}
+        />
+      </QueryClientProvider>
 
       <ApiKeyInput
         setApiKey={setApiKey}
