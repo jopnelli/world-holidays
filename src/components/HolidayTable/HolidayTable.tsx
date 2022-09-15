@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "react-query";
 import { SystemMessageType } from "../SystemMessage/SystemMessage.types";
 import { SystemMessage } from "../SystemMessage/SystemMessage";
-import { useEffect, useMemo, useState } from "react";
 import { holidayTypeOptions } from "../HolidayTypeFilter/HolidayTypeSelectField";
 import {
   HolidayTypeStyled,
@@ -14,6 +13,7 @@ import { HolidayItem, HolidayType } from "./HolidayTable.types";
 
 const year = new Date().getFullYear().toString();
 const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
+const STALE_TIME = 1000 * 60 * 5;
 
 export function HolidayTable({
   country,
@@ -24,8 +24,6 @@ export function HolidayTable({
   holidayTypeFilter: HolidayType[];
   apiKey: string;
 }) {
-  const [holidayData, setHolidayData] = useState<HolidayItem[]>();
-
   const fetchHolidays = async () => {
     const res = await fetch(
       `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`
@@ -34,88 +32,51 @@ export function HolidayTable({
     return removeDuplicateHolidays(data.response.holidays);
   };
 
-  const { status } = useQuery(
+  const { isLoading, isError, data } = useQuery(
     ["holidays", apiKey, country, year],
     fetchHolidays,
-    { onSuccess: setHolidayData, staleTime: 600000 }
+    {
+      select: (data) => filterHolidays(data, holidayTypeFilter),
+      staleTime: STALE_TIME,
+    }
   );
 
-  const filteredHolidays = useMemo(() => {
-    if (!holidayData) return [];
-
-    const holidayTypeFilterValues = holidayTypeFilter.flatMap((t) => t.value);
-
-    if (!holidayTypeFilter.length) return holidayData;
-
-    if (holidayTypeFilterValues.includes("Religious")) {
-      const nonReligiousHolidays = holidayTypeOptions
-        .filter((h) => h.label !== "Religious")
-        .flatMap((h) => h.value);
-      return holidayData.filter((h) =>
-        h.type.some((t) => !nonReligiousHolidays.includes(t))
-      );
-    }
-
-    return holidayData.filter((h) =>
-      h.type.some((t) => holidayTypeFilterValues.includes(t))
-    );
-  }, [holidayData, holidayTypeFilter]);
-
-  if (status === "error")
-    return <SystemMessage type={SystemMessageType.ERROR} />;
-
-  if (status === "loading")
-    return (
-      <TableStyled>
-        <table>
-          <thead>
-            <tr>
-              {headers.map((h, i) => {
-                return <th key={i}>{h}</th>;
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {[...Array(5)].map((e, i) => {
-              return (
-                <tr key={i}>
-                  <td>
-                    <LoadingStateSkeleton />
-                  </td>
-                  <td>
-                    <LoadingStateSkeleton />
-                  </td>
-                  <td>
-                    <LoadingStateSkeleton />
-                  </td>
-                  <td>
-                    <HolidayTypeTableCell>
-                      <LoadingStateSkeleton />
-                      <LoadingStateSkeleton />
-                    </HolidayTypeTableCell>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </TableStyled>
-    );
+  if (isError) return <SystemMessage type={SystemMessageType.ERROR} />;
 
   return (
-    <>
-      {status === "success" && holidayData && (
-        <TableStyled>
-          <table>
-            <thead>
-              <tr>
-                {headers.map((h, i) => {
-                  return <th key={i}>{h}</th>;
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredHolidays.map((h, i) => {
+    <TableStyled>
+      <table>
+        <thead>
+          <tr>
+            {headers.map((h, i) => {
+              return <th key={i}>{h}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading
+            ? [...Array(5)].map((e, i) => {
+                return (
+                  <tr key={i}>
+                    <td>
+                      <LoadingStateSkeleton />
+                    </td>
+                    <td>
+                      <LoadingStateSkeleton />
+                    </td>
+                    <td>
+                      <LoadingStateSkeleton />
+                    </td>
+                    <td>
+                      <HolidayTypeTableCell>
+                        <LoadingStateSkeleton />
+                        <LoadingStateSkeleton />
+                      </HolidayTypeTableCell>
+                    </td>
+                  </tr>
+                );
+              })
+            : data!.map((h, i) => {
                 const date = new Date(h.date.iso);
                 return (
                   <tr key={i}>
@@ -147,11 +108,9 @@ export function HolidayTable({
                   </tr>
                 );
               })}
-            </tbody>
-          </table>
-        </TableStyled>
-      )}
-    </>
+        </tbody>
+      </table>
+    </TableStyled>
   );
 }
 
@@ -159,5 +118,27 @@ function removeDuplicateHolidays(holidays: HolidayItem[]) {
   return holidays.filter(
     (h, index, holidays) =>
       index === holidays.findIndex((h2) => h2.name === h.name)
+  );
+}
+
+function filterHolidays(
+  holidayData: HolidayItem[],
+  holidayFilter: HolidayType[]
+) {
+  const holidayTypeFilterValues = holidayFilter.flatMap((t) => t.value);
+
+  if (!holidayFilter.length) return holidayData;
+
+  if (holidayTypeFilterValues.includes("Religious")) {
+    const nonReligiousHolidays = holidayTypeOptions
+      .filter((h) => h.label !== "Religious")
+      .flatMap((h) => h.value);
+    return holidayData.filter((h) =>
+      h.type.some((t) => !nonReligiousHolidays.includes(t))
+    );
+  }
+
+  return holidayData.filter((h) =>
+    h.type.some((t) => holidayTypeFilterValues.includes(t))
   );
 }

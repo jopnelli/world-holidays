@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { InputFieldStyled } from "../CountrySearchField/SearchCountryInputField.styled";
+import { InputFieldStyled } from "../../shared/StyledComponents";
 
 export const ApiKeyInputFieldStyled = styled(InputFieldStyled)<{
   isMissing: boolean;

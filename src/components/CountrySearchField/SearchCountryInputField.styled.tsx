@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { InputFieldStyled } from "../../shared/StyledComponents";
 
 export const StyledList = styled.ul`
   border: 1px solid #c5cfdc;
@@ -24,15 +25,7 @@ export const NoSuggestionsStyled = styled.div`
   padding: 5px 0;
 `;
 
-export const InputFieldStyled = styled.input`
-  border-radius: 4px;
-  border: 1px solid hsl(0, 0%, 80%);
-  width: 300px;
-  height: 38px;
-  font-size: 14px;
-  padding-left: 10px;
-  box-sizing: border-box;
-`;
+export const SearchCountryInputFieldStyled = styled(InputFieldStyled)``;
 
 export const StyledListItem = styled.li`
   padding: 0.5rem;

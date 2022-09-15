@@ -3,10 +3,10 @@ import {
   supportedCountries,
   supportedCountryCodes,
   supportedCountryNames,
-} from "../../supportedCountries";
+} from "../../shared/supportedCountries";
 import {
-  InputFieldStyled,
   NoSuggestionsStyled,
+  SearchCountryInputFieldStyled,
   SearchCountryInputFieldWrapper,
   StyledList,
   StyledListItem,
@@ -39,7 +39,7 @@ export function SearchCountryInputField({
     if (!inputIsValid(autocompleteState.userInput)) {
       setSearchCountry({ code: "", isValid: false });
     }
-  }, [autocompleteState.userInput]);
+  }, [autocompleteState.userInput, setSearchCountry]);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const userInput = e.currentTarget.value;
@@ -120,7 +120,7 @@ export function SearchCountryInputField({
 
   return (
     <SearchCountryInputFieldWrapper>
-      <InputFieldStyled
+      <SearchCountryInputFieldStyled
         type="text"
         placeholder="Start typing to search country..."
         onChange={onChange}
