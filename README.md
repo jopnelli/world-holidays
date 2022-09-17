@@ -1,7 +1,7 @@
 # Holidays across the world
 
 Uses the Calendarific Holiday API endpoint to display holidays for a selected country for the current year.
-Requires an API key from a Calendarific [free account](https://calendarific.com/signup).
+Requires an API key from a [Calendarific free account](https://calendarific.com/signup).
 
 ## Available Scripts
 

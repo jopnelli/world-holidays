@@ -51,8 +51,8 @@ export const TableStyled = styled.div`
   }
 `;
 
-export const HolidayTypeStyled = styled.span<{ color: string }>`
-  background-color: ${(props) => props.color};
+export const HolidayTypeStyled = styled.span<{ $color: string }>`
+  background-color: ${(props) => props.$color};
   padding: 6px;
   border-radius: 3px;
   height: fit-content;

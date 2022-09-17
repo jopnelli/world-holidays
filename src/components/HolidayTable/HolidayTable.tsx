@@ -2,14 +2,18 @@ import React from "react";
 import { useQuery } from "react-query";
 import { SystemMessageType } from "../SystemMessage/SystemMessage.types";
 import { SystemMessage } from "../SystemMessage/SystemMessage";
-import { holidayTypeOptions } from "../HolidayTypeFilter/HolidayTypeSelectField";
+import { holidayTypeOptions } from "../HolidayTypeSelectField/HolidayTypeSelectField.constants";
 import {
   HolidayTypeStyled,
   HolidayTypeTableCell,
   LoadingStateSkeleton,
   TableStyled,
 } from "./HolidayTable.styled";
-import { HolidayItem, HolidayType } from "./HolidayTable.types";
+import { HolidayType } from "./HolidayTable.types";
+import {
+  filterHolidays,
+  removeDuplicateHolidays,
+} from "./HolidayTable.helpers";
 
 const year = new Date().getFullYear().toString();
 const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
@@ -104,7 +108,7 @@ export function HolidayTable({
                           return (
                             <HolidayTypeStyled
                               key={i}
-                              color={holidayTypeOption.color}
+                              $color={holidayTypeOption.color}
                             >
                               {holidayTypeOption.label}
                             </HolidayTypeStyled>
@@ -118,34 +122,5 @@ export function HolidayTable({
         </tbody>
       </table>
     </TableStyled>
-  );
-}
-
-function removeDuplicateHolidays(holidays: HolidayItem[]) {
-  return holidays.filter(
-    (h, index, holidays) =>
-      index === holidays.findIndex((h2) => h2.name === h.name)
-  );
-}
-
-function filterHolidays(
-  holidayData: HolidayItem[],
-  holidayFilter: HolidayType[]
-) {
-  const holidayTypeFilterValues = holidayFilter.flatMap((t) => t.value);
-
-  if (!holidayFilter.length) return holidayData;
-
-  if (holidayTypeFilterValues.includes("Religious")) {
-    const nonReligiousHolidays = holidayTypeOptions
-      .filter((h) => h.label !== "Religious")
-      .flatMap((h) => h.value);
-    return holidayData.filter((h) =>
-      h.type.some((t) => !nonReligiousHolidays.includes(t))
-    );
-  }
-
-  return holidayData.filter((h) =>
-    h.type.some((t) => holidayTypeFilterValues.includes(t))
   );
 }

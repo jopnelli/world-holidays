@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { InputFieldStyled } from "../../shared/StyledComponents";
 
 export const StyledList = styled.ul`
@@ -25,10 +25,19 @@ export const NoSuggestionsStyled = styled.div`
   padding: 5px 0;
 `;
 
-export const SearchCountryInputFieldStyled = styled(InputFieldStyled)``;
+export const CountryInputFieldStyled = styled(InputFieldStyled)``;
 
-export const StyledListItem = styled.li`
+export const StyledListItem = styled.li<{ isActive: boolean }>`
   padding: 0.5rem;
+
+  // TODO: remove duplicate code
+  ${(p) =>
+    p.isActive &&
+    css`
+      background-color: #f9fbfc;
+      cursor: pointer;
+      font-weight: 700;
+    `}
 
   &:hover {
     background-color: #f9fbfc;

@@ -1,19 +1,16 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  supportedCountries,
-  supportedCountryCodes,
-  supportedCountryNames,
-} from "../../shared/supportedCountries";
+import { supportedCountryNames } from "../../shared/supportedCountries";
 import {
   NoSuggestionsStyled,
-  SearchCountryInputFieldStyled,
+  CountryInputFieldStyled,
   SearchCountryInputFieldWrapper,
   StyledList,
   StyledListItem,
-} from "./SearchCountryInputField.styled";
-import { AutocompleteState } from "./SearchCountryInputField.types";
+} from "./CountryInputField.styled";
+import { AutocompleteState } from "./CountryInputField.types";
+import { findCountryCode, inputIsValid } from "./CountryInputField.helpers";
 
-export function SearchCountryInputField({
+export function CountryInputField({
   setSearchCountry,
 }: {
   setSearchCountry: Dispatch<
@@ -100,9 +97,13 @@ export function SearchCountryInputField({
     if (autocompleteState.filteredSuggestions.length) {
       suggestionsListComponent = (
         <StyledList>
-          {autocompleteState.filteredSuggestions.map((suggestion) => {
+          {autocompleteState.filteredSuggestions.map((suggestion, index) => {
             return (
-              <StyledListItem key={suggestion} onClick={onClick}>
+              <StyledListItem
+                key={suggestion}
+                isActive={index === autocompleteState.activeSuggestion}
+                onClick={onClick}
+              >
                 {suggestion}
               </StyledListItem>
             );
@@ -120,7 +121,7 @@ export function SearchCountryInputField({
 
   return (
     <SearchCountryInputFieldWrapper>
-      <SearchCountryInputFieldStyled
+      <CountryInputFieldStyled
         type="text"
         placeholder="Start typing to search country..."
         onChange={onChange}
@@ -130,16 +131,4 @@ export function SearchCountryInputField({
       {suggestionsListComponent}
     </SearchCountryInputFieldWrapper>
   );
-}
-
-function inputIsValid(input: string) {
-  return !(
-    (input.length !== 2 && !supportedCountryNames.includes(input)) ||
-    (input.length === 2 && !supportedCountryCodes.includes(input))
-  );
-}
-
-function findCountryCode(input: string) {
-  if (input.length === 2) return input.toLowerCase();
-  return supportedCountries.find((c) => c.name === input)!.iso.toLowerCase();
 }

@@ -3,10 +3,11 @@ import { HolidayTable } from "./components/HolidayTable/HolidayTable";
 import { QueryClient, QueryClientProvider } from "react-query";
 import styled from "styled-components";
 import { useState } from "react";
-import { SearchCountryInputField } from "./components/CountrySearchField/SearchCountryInputField";
+import { CountryInputField } from "./components/CountryInputField/CountryInputField";
 import { HolidayType } from "./components/HolidayTable/HolidayTable.types";
-import { HolidayTypeSelectField } from "./components/HolidayTypeFilter/HolidayTypeSelectField";
-import { ApiKeyInput } from "./components/ApiKeyInput/ApiKeyInput";
+import { HolidayTypeSelectField } from "./components/HolidayTypeSelectField/HolidayTypeSelectField";
+import { ApiKeyInputField } from "./components/ApiKeyInputField/ApiKeyInputField";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
@@ -21,31 +22,33 @@ export default function App() {
   const queryClient = new QueryClient();
 
   return (
-    <Container>
-      <header>
-        <h1>Holidays across the world</h1>
-      </header>
+    <QueryClientProvider client={queryClient}>
+      <Container>
+        <header>
+          <h1>Holidays across the world</h1>
+        </header>
 
-      <HolidayTableControlsWrapper>
-        <SearchCountryInputField setSearchCountry={setSearchCountryCode} />
+        <HolidayTableControlsWrapper>
+          <CountryInputField setSearchCountry={setSearchCountryCode} />
 
-        <HolidayTypeSelectField setSelectedType={setSelectedHolidayType} />
-      </HolidayTableControlsWrapper>
+          <HolidayTypeSelectField setSelectedType={setSelectedHolidayType} />
+        </HolidayTableControlsWrapper>
 
-      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
         <HolidayTable
           country={searchCountryCode.code}
           holidayTypeFilter={selectedHolidayType}
           apiKey={apiKey}
           isEnabled={!!apiKey.length && searchCountryCode.isValid}
         />
-      </QueryClientProvider>
 
-      <ApiKeyInput
-        setApiKey={setApiKey}
-        isMissing={!!searchCountryCode.code && !apiKey}
-      />
-    </Container>
+        <ApiKeyInputField
+          apiKey={apiKey}
+          setApiKey={setApiKey}
+          isMissing={!!searchCountryCode.code && !apiKey}
+        />
+      </Container>
+    </QueryClientProvider>
   );
 }
 
