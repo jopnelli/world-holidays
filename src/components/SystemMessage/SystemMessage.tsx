@@ -1,20 +1,14 @@
 import React from "react";
 import { SystemMessageType } from "./SystemMessage.types";
-import {
-  SystemMessageDescription,
-  SystemMessageTitle,
-  SystemMessageWrapper,
-} from "./SystemMessage.styled";
+import { Description, Title, Wrapper } from "./SystemMessage.styled";
 
 export function SystemMessage({ type }: { type: SystemMessageType }) {
   return (
-    <SystemMessageWrapper>
-      <SystemMessageTitle>{systemMessageData[type].title}</SystemMessageTitle>
+    <Wrapper>
+      <Title>{systemMessageData[type].title}</Title>
 
-      <SystemMessageDescription>
-        {systemMessageData[type].description}
-      </SystemMessageDescription>
-    </SystemMessageWrapper>
+      <Description>{systemMessageData[type].description}</Description>
+    </Wrapper>
   );
 }
 

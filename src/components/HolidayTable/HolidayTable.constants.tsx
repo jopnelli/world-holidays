@@ -1,0 +1,2 @@
+export const TABLE_HEADERS = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
+export const MILLISECONDS_IN_FIVE_MINUTES = 1000 * 60 * 5;

@@ -3,12 +3,14 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import styled from "styled-components";
+import "./shared/theme.css";
 
-const PageWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
-  min-height: 50vh;
+  height: 100%;
   flex-direction: column;
   justify-content: space-between;
+  box-sizing: border-box;
   padding: 30px;
 `;
 
@@ -17,7 +19,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <PageWrapper>
+  <Wrapper>
     <App />
-  </PageWrapper>
+  </Wrapper>
 );

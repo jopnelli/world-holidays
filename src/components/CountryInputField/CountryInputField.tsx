@@ -1,44 +1,30 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supportedCountryNames } from "../../shared/supportedCountries";
-import {
-  NoSuggestionsStyled,
-  CountryInputFieldStyled,
-  SearchCountryInputFieldWrapper,
-  StyledList,
-  StyledListItem,
-} from "./CountryInputField.styled";
+import { CountryInputFieldStyled, Wrapper } from "./CountryInputField.styled";
 import { AutocompleteState } from "./CountryInputField.types";
-import { findCountryCode, inputIsValid } from "./CountryInputField.helpers";
+import { getCountryCode, inputIsValid } from "./CountryInputField.helpers";
+import { SuggestionsList } from "./SuggestionsList";
 
 export function CountryInputField({
-  setSearchCountry,
+  onChange,
 }: {
-  setSearchCountry: Dispatch<
-    SetStateAction<{ code: string; isValid: boolean }>
-  >;
+  onChange: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [autocompleteState, setAutocompleteState] = useState<AutocompleteState>(
     {
       activeSuggestion: 0,
       filteredSuggestions: [],
-      showSuggestions: false,
+      hasSuggestions: false,
       userInput: "",
     }
   );
 
   useEffect(() => {
-    if (inputIsValid(autocompleteState.userInput)) {
-      setSearchCountry({
-        code: findCountryCode(autocompleteState.userInput),
-        isValid: true,
-      });
-    }
-    if (!inputIsValid(autocompleteState.userInput)) {
-      setSearchCountry({ code: "", isValid: false });
-    }
-  }, [autocompleteState.userInput, setSearchCountry]);
+    if (inputIsValid(autocompleteState.userInput))
+      onChange(getCountryCode(autocompleteState.userInput));
+  }, [autocompleteState.userInput, onChange]);
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const userInput = e.currentTarget.value;
 
     const filteredSuggestions = supportedCountryNames.filter(
@@ -48,28 +34,28 @@ export function CountryInputField({
     setAutocompleteState({
       activeSuggestion: 0,
       filteredSuggestions,
-      showSuggestions: true,
+      hasSuggestions: true,
       userInput,
     });
   }
 
-  function onClick(e: React.MouseEvent<HTMLLIElement, MouseEvent>) {
+  function onClickHandler(e: React.MouseEvent<HTMLLIElement, MouseEvent>) {
     setAutocompleteState({
       activeSuggestion: 0,
       filteredSuggestions: [],
-      showSuggestions: false,
+      hasSuggestions: false,
       userInput: e.currentTarget.innerText,
     });
   }
 
-  function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+  function onKeyDownHandler(e: React.KeyboardEvent<HTMLDivElement>) {
     const { activeSuggestion, filteredSuggestions } = autocompleteState;
 
     if (e.key === "Enter" && filteredSuggestions.length) {
       setAutocompleteState({
         activeSuggestion: 0,
         filteredSuggestions,
-        showSuggestions: false,
+        hasSuggestions: false,
         userInput: filteredSuggestions[activeSuggestion],
       });
     }
@@ -91,44 +77,19 @@ export function CountryInputField({
     }
   }
 
-  let suggestionsListComponent;
-
-  if (autocompleteState.showSuggestions && autocompleteState.userInput) {
-    if (autocompleteState.filteredSuggestions.length) {
-      suggestionsListComponent = (
-        <StyledList>
-          {autocompleteState.filteredSuggestions.map((suggestion, index) => {
-            return (
-              <StyledListItem
-                key={suggestion}
-                isActive={index === autocompleteState.activeSuggestion}
-                onClick={onClick}
-              >
-                {suggestion}
-              </StyledListItem>
-            );
-          })}
-        </StyledList>
-      );
-    } else {
-      suggestionsListComponent = (
-        <NoSuggestionsStyled>
-          <em>No suggestions available.</em>
-        </NoSuggestionsStyled>
-      );
-    }
-  }
-
   return (
-    <SearchCountryInputFieldWrapper>
+    <Wrapper>
       <CountryInputFieldStyled
         type="text"
         placeholder="Start typing to search country..."
-        onChange={onChange}
-        onKeyDown={onKeyDown}
+        onChange={onChangeHandler}
+        onKeyDown={onKeyDownHandler}
         value={autocompleteState.userInput}
       />
-      {suggestionsListComponent}
-    </SearchCountryInputFieldWrapper>
+      <SuggestionsList
+        autocompleteState={autocompleteState}
+        onClick={onClickHandler}
+      />
+    </Wrapper>
   );
 }

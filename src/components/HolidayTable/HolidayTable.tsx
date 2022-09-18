@@ -7,44 +7,43 @@ import {
   HolidayTypeStyled,
   HolidayTypeTableCell,
   LoadingStateSkeleton,
-  TableStyled,
+  HolidayTableStyled,
 } from "./HolidayTable.styled";
 import { HolidayType } from "./HolidayTable.types";
 import {
-  filterHolidays,
+  currentYear,
+  getFilteredHolidays,
   removeDuplicateHolidays,
 } from "./HolidayTable.helpers";
-
-const year = new Date().getFullYear().toString();
-const headers = ["NAME", "DATE", "DESCRIPTION", "TYPE"];
-const STALE_TIME = 1000 * 60 * 5;
+import {
+  MILLISECONDS_IN_FIVE_MINUTES,
+  TABLE_HEADERS,
+} from "./HolidayTable.constants";
 
 export function HolidayTable({
   country,
   holidayTypeFilter,
   apiKey,
-  isEnabled,
 }: {
   country: string;
   holidayTypeFilter: HolidayType[];
   apiKey: string;
-  isEnabled: boolean;
 }) {
   const fetchHolidays = async () => {
     const res = await fetch(
-      `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`
+      `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${currentYear}`
     );
     const data = await res.json();
     return removeDuplicateHolidays(data.response.holidays);
   };
 
   const { isLoading, isError, data } = useQuery(
-    ["holidays", apiKey, country, year],
+    ["holidays", apiKey, country, currentYear],
     fetchHolidays,
     {
-      select: (data) => filterHolidays(data, holidayTypeFilter),
-      staleTime: STALE_TIME,
-      enabled: isEnabled,
+      select: (data) => getFilteredHolidays(data, holidayTypeFilter),
+      staleTime: MILLISECONDS_IN_FIVE_MINUTES,
+      enabled: !!country && !!apiKey,
     }
   );
 
@@ -55,11 +54,11 @@ export function HolidayTable({
   if (isError) return <SystemMessage type={SystemMessageType.ERROR} />;
 
   return (
-    <TableStyled>
+    <HolidayTableStyled>
       <table>
         <thead>
           <tr>
-            {headers.map((h, i) => {
+            {TABLE_HEADERS.map((h, i) => {
               return <th key={i}>{h}</th>;
             })}
           </tr>
@@ -121,6 +120,6 @@ export function HolidayTable({
               })}
         </tbody>
       </table>
-    </TableStyled>
+    </HolidayTableStyled>
   );
 }

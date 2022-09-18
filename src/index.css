@@ -1,5 +1,7 @@
 * {
- font-family: Helvetica Neue, sans-serif;
+    font-family: Helvetica Neue, sans-serif;
+    /*color: var(--colors-primary);*/
+    /*background: var(--colors-background);*/
 }
 
 ::placeholder {
@@ -7,3 +9,6 @@
     color: hsl(0, 0%, 50%);
 }
 
+#root {
+    height: min(100vh - 2rem);
+}

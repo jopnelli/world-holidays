@@ -8,57 +8,62 @@ import { HolidayType } from "./components/HolidayTable/HolidayTable.types";
 import { HolidayTypeSelectField } from "./components/HolidayTypeSelectField/HolidayTypeSelectField";
 import { ApiKeyInputField } from "./components/ApiKeyInputField/ApiKeyInputField";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { ThemeSwitchButton } from "./components/ThemeSwitchButton/ThemeSwitchButton";
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
   const [selectedHolidayType, setSelectedHolidayType] = useState<HolidayType[]>(
     []
   );
-  const [searchCountryCode, setSearchCountryCode] = useState({
-    code: "",
-    isValid: false,
-  });
+  const [searchCountryCode, setSearchCountryCode] = useState("");
 
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Container>
-        <header>
+    <Container>
+      <QueryClientProvider client={queryClient}>
+        <HeaderStyled>
           <h1>Holidays across the world</h1>
-        </header>
 
-        <HolidayTableControlsWrapper>
-          <CountryInputField setSearchCountry={setSearchCountryCode} />
+          <HolidayTableControlsWrapper>
+            <CountryInputField
+              onChange={(input) => setSearchCountryCode(input)}
+            />
 
-          <HolidayTypeSelectField setSelectedType={setSelectedHolidayType} />
-        </HolidayTableControlsWrapper>
+            <HolidayTypeSelectField
+              onChange={(input) => setSelectedHolidayType(input)}
+            />
+
+            {/*<ThemeSwitchButton />*/}
+          </HolidayTableControlsWrapper>
+        </HeaderStyled>
 
         <ReactQueryDevtools initialIsOpen={false} />
         <HolidayTable
-          country={searchCountryCode.code}
+          country={searchCountryCode}
           holidayTypeFilter={selectedHolidayType}
           apiKey={apiKey}
-          isEnabled={!!apiKey.length && searchCountryCode.isValid}
         />
 
         <ApiKeyInputField
           apiKey={apiKey}
-          setApiKey={setApiKey}
-          isMissing={!!searchCountryCode.code && !apiKey}
+          onChange={(input) => setApiKey(input)}
+          isMissing={!!searchCountryCode && !apiKey}
         />
-      </Container>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </Container>
   );
 }
 
 const Container = styled.div`
-  padding-bottom: 30px;
   height: 100%;
 `;
 
 const HolidayTableControlsWrapper = styled.div`
   display: flex;
   gap: 30px;
-  margin-bottom: 20px;
+`;
+
+const HeaderStyled = styled.div`
+  height: 10%;
 `;

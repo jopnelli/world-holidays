@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
-export const TableStyled = styled.div`
+export const HolidayTableStyled = styled.div`
   border: 1px solid #c5cfdc;
   border-radius: 10px;
 

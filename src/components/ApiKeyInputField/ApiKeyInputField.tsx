@@ -1,25 +1,22 @@
 import React, { useEffect } from "react";
-import {
-  ApiKeyInputFieldStyled,
-  ApiKeyInputWrapper,
-} from "./ApiKeyInputField.styled";
+import { ApiKeyInputFieldStyled, Wrapper } from "./ApiKeyInputField.styled";
 
 export function ApiKeyInputField({
   apiKey,
-  setApiKey,
+  onChange,
   isMissing,
 }: {
   apiKey: string;
-  setApiKey: React.Dispatch<React.SetStateAction<string>>;
+  onChange: React.Dispatch<React.SetStateAction<string>>;
   isMissing: boolean;
 }) {
   useEffect(() => {
     const storedApiKey = localStorage.getItem("apiKey");
-    if (storedApiKey) setApiKey(storedApiKey);
-  }, []);
+    if (storedApiKey) onChange(storedApiKey);
+  }, [onChange]);
 
   return (
-    <ApiKeyInputWrapper>
+    <Wrapper>
       <ApiKeyInputFieldStyled
         type="text"
         name="api-key-input"
@@ -27,10 +24,10 @@ export function ApiKeyInputField({
         defaultValue={apiKey}
         onChange={(e) => {
           localStorage.setItem("apiKey", e.currentTarget.value);
-          setApiKey(e.currentTarget.value);
+          onChange(e.currentTarget.value);
         }}
         isMissing={isMissing}
       />
-    </ApiKeyInputWrapper>
+    </Wrapper>
   );
 }

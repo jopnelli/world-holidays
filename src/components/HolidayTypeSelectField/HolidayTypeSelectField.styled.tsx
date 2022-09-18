@@ -3,7 +3,7 @@ import { StylesConfig } from "react-select";
 import { HolidayType } from "../HolidayTable/HolidayTable.types";
 import chroma from "chroma-js";
 
-export const HolidayTypeSelectFieldWrapper = styled.div`
+export const Wrapper = styled.div`
   & #react-select-2-placeholder {
     font-size: 14px;
   }

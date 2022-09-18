@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import { InputFieldStyled } from "../../shared/StyledComponents";
+import { InputField } from "../../shared/StyledComponents";
 
-export const ApiKeyInputFieldStyled = styled(InputFieldStyled)<{
+export const ApiKeyInputFieldStyled = styled(InputField)<{
   isMissing: boolean;
 }>`
   border: 1px solid hsl(0, 0%, 80%);
@@ -13,8 +13,10 @@ export const ApiKeyInputFieldStyled = styled(InputFieldStyled)<{
     `}
 `;
 
-export const ApiKeyInputWrapper = styled.div`
-  padding: 30px;
+export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
+  height: 10%;
+  margin-top: 10px;
+  box-sizing: border-box;
 `;
