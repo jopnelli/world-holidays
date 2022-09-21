@@ -16,7 +16,6 @@ export const ApiKeyInputFieldStyled = styled(InputField)<{
 export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  height: 10%;
   margin-top: 10px;
   box-sizing: border-box;
 `;

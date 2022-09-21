@@ -11,8 +11,10 @@ export function ApiKeyInputField({
   isMissing: boolean;
 }) {
   useEffect(() => {
-    const storedApiKey = localStorage.getItem("apiKey");
-    if (storedApiKey) onChange(storedApiKey);
+    if (!apiKey) {
+      const storedApiKey = localStorage.getItem("apiKey");
+      if (storedApiKey) onChange(storedApiKey);
+    }
   }, [onChange]);
 
   return (

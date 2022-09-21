@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 export const HolidayTableStyled = styled.div`
   border: 1px solid #c5cfdc;
   border-radius: 10px;
+  flex-grow: 1;
 
   table {
     width: 100%;

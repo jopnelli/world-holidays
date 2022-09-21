@@ -20,8 +20,9 @@ export default function App() {
   const queryClient = new QueryClient();
 
   return (
-    <Container>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <Container>
         <HeaderStyled>
           <h1>Holidays across the world</h1>
 
@@ -38,7 +39,6 @@ export default function App() {
           </HolidayTableControlsWrapper>
         </HeaderStyled>
 
-        <ReactQueryDevtools initialIsOpen={false} />
         <HolidayTable
           country={searchCountryCode}
           holidayTypeFilter={selectedHolidayType}
@@ -50,13 +50,19 @@ export default function App() {
           onChange={(input) => setApiKey(input)}
           isMissing={!!searchCountryCode && !apiKey}
         />
-      </QueryClientProvider>
-    </Container>
+      </Container>
+    </QueryClientProvider>
   );
 }
 
 const Container = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 30px;
+  gap: 20px;
 `;
 
 const HolidayTableControlsWrapper = styled.div`
@@ -64,6 +70,4 @@ const HolidayTableControlsWrapper = styled.div`
   gap: 30px;
 `;
 
-const HeaderStyled = styled.div`
-  height: 10%;
-`;
+const HeaderStyled = styled.div``;
