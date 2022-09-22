@@ -13,7 +13,7 @@ export function SystemMessage({ type }: { type: SystemMessageType }) {
 }
 
 const systemMessageData = {
-  [SystemMessageType.EMPTY]: {
+  [SystemMessageType.COUNTRY_EMPTY]: {
     title: "Welcome!",
     description:
       "Start typing a country in the search box above to load holidays.",

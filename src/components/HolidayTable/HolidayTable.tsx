@@ -47,7 +47,7 @@ export function HolidayTable({
     }
   );
 
-  if (!country) return <SystemMessage type={SystemMessageType.EMPTY} />;
+  if (!country) return <SystemMessage type={SystemMessageType.COUNTRY_EMPTY} />;
 
   if (!apiKey) return <SystemMessage type={SystemMessageType.API} />;
 
