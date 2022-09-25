@@ -1,0 +1,14 @@
+/*tbc*/
+body[data-theme='Light'] {
+    --colors-background: white;
+    --colors-text-light: hsl(0, 0%, 50%);
+    --colors-text-normal: black;
+    --colors-border: hsl(0, 0%, 80%);
+}
+
+body[data-theme='Dark'] {
+    --colors-background: #4B4C4C;
+    --colors-text-light: hsl(0, 0%, 80%);
+    --colors-text-normal: white;
+    --colors-border: hsl(0, 0%, 100%);
+}
