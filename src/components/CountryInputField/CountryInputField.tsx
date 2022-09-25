@@ -79,8 +79,13 @@ export function CountryInputField({
 
   return (
     <Wrapper>
+      <label htmlFor="country-input" className="sr-only">
+        Country Input Field
+      </label>
       <CountryInputFieldStyled
         type="text"
+        name="country-input"
+        id="country-input"
         placeholder="Start typing to search country..."
         onChange={onChangeHandler}
         onKeyDown={onKeyDownHandler}

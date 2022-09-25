@@ -11,8 +11,12 @@ export function HolidayTypeSelectField({
 }) {
   return (
     <Wrapper>
+      <label htmlFor="holiday-type-select" className="sr-only">
+        Holiday Type Select Field
+      </label>
       <Select
         isMulti
+        id="holiday-type-select"
         closeMenuOnSelect={false}
         styles={colourStyles}
         placeholder="Select holiday type..."

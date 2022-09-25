@@ -19,9 +19,13 @@ export function ApiKeyInputField({
 
   return (
     <Wrapper>
+      <label htmlFor="api-key-input" className="sr-only">
+        Api Key Input Field
+      </label>
       <ApiKeyInputFieldStyled
         type="text"
         name="api-key-input"
+        id="api-key-input"
         placeholder="Enter API Key"
         defaultValue={apiKey}
         onChange={(e) => {
