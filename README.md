@@ -3,6 +3,8 @@
 Uses the Calendarific Holiday API endpoint to display holidays for a selected country for the current year.
 Requires an API key from a [Calendarific free account](https://calendarific.com/signup).
 
+[Published website](jopnelli-world-holidays.surge.sh)
+
 ## Available Scripts
 
 In the project directory, you can run:
