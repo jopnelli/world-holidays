@@ -8,3 +8,6 @@
 /src/components/helpers/getSupportedCountries.ts
 
 package-lock.json
+
+/coverage
+/.netlify

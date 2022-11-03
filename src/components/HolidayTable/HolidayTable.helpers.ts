@@ -12,7 +12,6 @@ export function getFilteredHolidays(
   holidayData: HolidayItem[],
   holidayFilter: HolidayType[]
 ) {
-  console.log(holidayFilter);
   const holidayTypeFilterValues = holidayFilter.flatMap((t) => t.value);
 
   if (!holidayFilter.length) return holidayData;

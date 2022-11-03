@@ -26,6 +26,7 @@ export function ApiKeyInputField({
         type="text"
         name="api-key-input"
         id="api-key-input"
+        data-testid="api-key-input"
         placeholder="Enter API Key"
         defaultValue={apiKey}
         onChange={(e) => {
