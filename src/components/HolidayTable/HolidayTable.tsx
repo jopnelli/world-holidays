@@ -9,16 +9,35 @@ import {
   LoadingStateSkeleton,
   HolidayTableStyled,
 } from "./HolidayTable.styled";
-import { HolidayType } from "./HolidayTable.types";
+import { HolidayItem, HolidayType } from "./HolidayTable.types";
 import {
   currentYear,
   getFilteredHolidays,
-  removeDuplicateHolidays,
+  removeDuplicateByName,
 } from "./HolidayTable.helpers";
 import {
   MILLISECONDS_IN_FIVE_MINUTES,
   TABLE_HEADERS,
 } from "./HolidayTable.constants";
+
+export const fetchHolidays = async ({
+  apiKey,
+  country,
+  year,
+}: {
+  apiKey: string;
+  country: string;
+  year: string;
+}) => {
+  const res = await fetch(
+    `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${year}`
+  );
+  const data = await res.json();
+  const removedDuplicateHolidays = removeDuplicateByName(
+    data.response.holidays
+  );
+  return removedDuplicateHolidays as HolidayItem[];
+};
 
 export function HolidayTable({
   country,
@@ -29,17 +48,9 @@ export function HolidayTable({
   holidayTypeFilter: HolidayType[];
   apiKey: string;
 }) {
-  const fetchHolidays = async () => {
-    const res = await fetch(
-      `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${country}&year=${currentYear}`
-    );
-    const data = await res.json();
-    return removeDuplicateHolidays(data.response.holidays);
-  };
-
   const { isLoading, isError, data } = useQuery(
     ["holidays", apiKey, country, currentYear],
-    fetchHolidays,
+    () => fetchHolidays({ apiKey, country, year: currentYear }),
     {
       select: (data) => getFilteredHolidays(data, holidayTypeFilter),
       staleTime: MILLISECONDS_IN_FIVE_MINUTES,
@@ -58,8 +69,8 @@ export function HolidayTable({
       <table>
         <thead>
           <tr>
-            {TABLE_HEADERS.map((h, i) => {
-              return <th key={i}>{h}</th>;
+            {TABLE_HEADERS.map((h) => {
+              return <th key={h}>{h}</th>;
             })}
           </tr>
         </thead>

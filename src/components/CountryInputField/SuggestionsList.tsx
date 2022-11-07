@@ -1,9 +1,9 @@
+import React from "react";
 import {
   Wrapper,
   SuggestionsListStyled,
   ListItem,
 } from "./SuggestionsList.styled";
-import React from "react";
 import { AutocompleteState } from "./CountryInputField.types";
 
 export function SuggestionsList({
@@ -30,13 +30,12 @@ export function SuggestionsList({
           })}
         </SuggestionsListStyled>
       );
-    } else {
-      return (
-        <Wrapper>
-          <em>No suggestions available.</em>
-        </Wrapper>
-      );
     }
+    return (
+      <Wrapper>
+        <em>No suggestions available.</em>
+      </Wrapper>
+    );
   }
 
   return <></>;

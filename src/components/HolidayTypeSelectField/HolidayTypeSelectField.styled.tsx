@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { StylesConfig } from "react-select";
-import { HolidayType } from "../HolidayTable/HolidayTable.types";
 import chroma from "chroma-js";
+import { HolidayType } from "../HolidayTable/HolidayTable.types";
 
 export const Wrapper = styled.div`
   & #react-select-2-placeholder {

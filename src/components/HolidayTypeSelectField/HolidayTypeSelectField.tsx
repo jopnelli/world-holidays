@@ -1,6 +1,6 @@
 import React from "react";
-import { HolidayType } from "../HolidayTable/HolidayTable.types";
 import Select from "react-select";
+import { HolidayType } from "../HolidayTable/HolidayTable.types";
 import { colourStyles, Wrapper } from "./HolidayTypeSelectField.styled";
 import { holidayTypeOptions } from "./HolidayTypeSelectField.constants";
 

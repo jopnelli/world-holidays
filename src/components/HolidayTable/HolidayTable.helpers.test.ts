@@ -1,10 +1,10 @@
 import {
   getFilteredHolidays,
-  removeDuplicateHolidays,
+  removeDuplicateByName,
 } from "./HolidayTable.helpers";
 import { HolidayItem } from "./HolidayTable.types";
 
-const duplicateHolidays: HolidayItem[] = [
+const dummyHolidayData: HolidayItem[] = [
   {
     name: "Easter Sunday",
     description: "",
@@ -84,32 +84,32 @@ const religiousFilter = {
   color: "#c0b6f3",
 };
 
-describe("removeDuplicateHolidays", () => {
-  const result = removeDuplicateHolidays(duplicateHolidays);
-
+// arrange act assert
+describe("removeDuplicateByName()", () => {
   it("should remove duplicates", () => {
+    const result = removeDuplicateByName([
+      { name: "a" },
+      { name: "b" },
+      { name: "a" },
+    ]);
     expect(result.length).toBe(2);
+    expect(result).toEqual([{ name: "a" }, { name: "b" }]);
   });
 });
 
-describe("getFilteredHolidays", () => {
-  describe("filterReligiousHolidays", () => {
-    const filterReligiousResult = getFilteredHolidays(duplicateHolidays, [
+// avoid code outside the it as much as possible
+describe("getFilteredHolidays()", () => {
+  it("should return religious type holiday", () => {
+    const filterReligiousResult = getFilteredHolidays(dummyHolidayData, [
       religiousFilter,
     ]);
-
-    it("should return religious type holiday", () => {
-      expect(filterReligiousResult.length).toBe(2);
-    });
+    expect(filterReligiousResult.length).toBe(2);
   });
 
-  describe("filterObservanceHolidays", () => {
-    const filterObservanceResult = getFilteredHolidays(duplicateHolidays, [
+  it("should return observance type holiday", () => {
+    const filterObservanceResult = getFilteredHolidays(dummyHolidayData, [
       observanceFilter,
     ]);
-
-    it("should return observance type holiday", () => {
-      expect(filterObservanceResult.length).toBe(1);
-    });
+    expect(filterObservanceResult.length).toBe(1);
   });
 });

@@ -1,10 +1,22 @@
 import { HolidayItem, HolidayType } from "./HolidayTable.types";
 import { holidayTypeOptions } from "../HolidayTypeSelectField/HolidayTypeSelectField.constants";
 
-export function removeDuplicateHolidays(holidays: HolidayItem[]) {
-  return holidays.filter(
-    (h, index, holidays) =>
-      index === holidays.findIndex((h2) => h2.name === h.name)
+interface Entry {
+  name: string;
+}
+
+// todo JSDocs
+/**
+ * given a list of objects remove duplicate items by name key
+ * @param entries - list of objects
+ * @example
+ * [{name: a}, {name: b}, {name: a}]
+ *  => [{name: a}, {name: b}]
+ */
+export function removeDuplicateByName(entries: Entry[]) {
+  return entries.filter(
+    (e, index, entries) =>
+      index === entries.findIndex((e2) => e.name === e2.name)
   );
 }
 
