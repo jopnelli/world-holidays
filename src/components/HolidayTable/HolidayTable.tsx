@@ -1,8 +1,17 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { SystemMessageType } from "../SystemMessage/SystemMessage.types";
-import { SystemMessage } from "../SystemMessage/SystemMessage";
 import { holidayTypeOptions } from "../HolidayTypeSelectField/HolidayTypeSelectField.constants";
+import { SystemMessage } from "../SystemMessage/SystemMessage";
+import { SystemMessageType } from "../SystemMessage/SystemMessage.types";
+import {
+  MILLISECONDS_IN_FIVE_MINUTES,
+  TABLE_HEADERS,
+} from "./HolidayTable.constants";
+import {
+  currentYear,
+  getFilteredHolidays,
+  removeDuplicateByName,
+} from "./HolidayTable.helpers";
 import {
   HolidayTypeStyled,
   HolidayTypeTableCell,
@@ -10,15 +19,6 @@ import {
   HolidayTableStyled,
 } from "./HolidayTable.styled";
 import { HolidayItem, HolidayType } from "./HolidayTable.types";
-import {
-  currentYear,
-  getFilteredHolidays,
-  removeDuplicateByName,
-} from "./HolidayTable.helpers";
-import {
-  MILLISECONDS_IN_FIVE_MINUTES,
-  TABLE_HEADERS,
-} from "./HolidayTable.constants";
 
 export const fetchHolidays = async ({
   apiKey,

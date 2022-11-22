@@ -1,5 +1,5 @@
-import { HolidayItem, HolidayType } from "./HolidayTable.types";
 import { holidayTypeOptions } from "../HolidayTypeSelectField/HolidayTypeSelectField.constants";
+import { HolidayItem, HolidayType } from "./HolidayTable.types";
 
 interface Entry {
   name: string;

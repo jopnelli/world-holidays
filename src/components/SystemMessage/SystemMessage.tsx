@@ -1,6 +1,6 @@
 import React from "react";
-import { SystemMessageType } from "./SystemMessage.types";
 import { Description, Title, Wrapper } from "./SystemMessage.styled";
+import { SystemMessageType } from "./SystemMessage.types";
 
 export function SystemMessage({ type }: { type: SystemMessageType }) {
   return (

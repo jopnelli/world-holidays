@@ -1,10 +1,10 @@
 import React from "react";
+import { AutocompleteState } from "./CountryInputField.types";
 import {
   Wrapper,
   SuggestionsListStyled,
   ListItem,
 } from "./SuggestionsList.styled";
-import { AutocompleteState } from "./CountryInputField.types";
 
 export function SuggestionsList({
   autocompleteState,

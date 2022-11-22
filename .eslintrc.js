@@ -39,6 +39,27 @@ module.exports = {
         argsIgnorePattern: "^_",
       },
     ],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "never",
+        alphabetize: { order: "asc" },
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type",
+        ],
+        pathGroups: [
+          { group: "builtin", pattern: "react", position: "before" },
+        ],
+        pathGroupsExcludedImportTypes: ["react"],
+      },
+    ],
   },
   settings: {
     react: {
