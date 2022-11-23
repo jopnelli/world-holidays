@@ -27,6 +27,7 @@ describe("manually mocking fetch with jest.spyOn", () => {
   });
 });
 
+// todo fix
 // describe("manually mocking fetch with global.fetch", () => {
 //   global.fetch = jest.fn(() =>
 //     Promise.resolve({
