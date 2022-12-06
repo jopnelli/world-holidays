@@ -1,6 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { ApiKeyInputField } from "./ApiKeyInputField";
+import { ApiKeyInputField } from "../ApiKeyInputField";
+import "jest-styled-components";
 
 describe("test api key input", () => {
   it("should set apiKey prop as defaultValue for input", () => {
@@ -13,11 +14,10 @@ describe("test api key input", () => {
       />
     );
 
-    // todo fix
-    // const inputElement = screen.getByRole("textbox", {
-    //   name: "api-key-input",
-    // });
-    const inputElement = screen.getByLabelText("Api Key Input Field");
+    const inputElement = screen.getByRole("textbox", {
+      name: "Api Key Input Field",
+    });
+    // const inputElement = screen.getByLabelText("Api Key Input Field");
     expect(inputElement.value).toBe(mockApiKey);
   });
 
@@ -50,6 +50,16 @@ describe("test api key input", () => {
     expect(localStorage.getItem("apiKey")).toEqual("12345");
   });
 
-  // todo add
-  // it("should highlight inputfield if apiKey is missing", () => {});
+  it("should highlight inputfield if apiKey is missing", () => {
+    render(
+      <ApiKeyInputField
+        apiKey={""}
+        onChange={() => () => null}
+        isMissing={true}
+      />
+    );
+
+    const inputElement = screen.getByLabelText("Api Key Input Field");
+    expect(inputElement).toHaveStyleRule("border-color: red");
+  });
 });

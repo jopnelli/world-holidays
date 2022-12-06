@@ -21,7 +21,10 @@ export function HolidayTypeSelectField({
         styles={colourStyles}
         placeholder="Select holiday type..."
         options={holidayTypeOptions}
-        onChange={(newValue) => onChange(newValue as HolidayType[])}
+        onChange={(newValue) => {
+          console.log(newValue);
+          onChange(newValue as HolidayType[]);
+        }}
       />
     </Wrapper>
   );

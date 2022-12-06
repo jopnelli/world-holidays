@@ -1,8 +1,8 @@
 import {
   getFilteredHolidays,
   removeDuplicateByName,
-} from "./HolidayTable.helpers";
-import { HolidayItem } from "./HolidayTable.types";
+} from "../HolidayTable.helpers";
+import { HolidayItem } from "../HolidayTable.types";
 
 const dummyHolidayData: HolidayItem[] = [
   {

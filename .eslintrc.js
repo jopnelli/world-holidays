@@ -27,7 +27,6 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "unused-imports"],
   rules: {
-    "@typescript-eslint/no-non-null-assertion": 0,
     "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
