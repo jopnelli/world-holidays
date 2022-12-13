@@ -1,8 +1,8 @@
 import React from "react";
-import { HolidayType } from "../HolidayTable/HolidayTable.types";
 import Select from "react-select";
-import { colourStyles, Wrapper } from "./HolidayTypeSelectField.styled";
+import { HolidayType } from "../HolidayTable/HolidayTable.types";
 import { holidayTypeOptions } from "./HolidayTypeSelectField.constants";
+import { colourStyles, Wrapper } from "./HolidayTypeSelectField.styled";
 
 export function HolidayTypeSelectField({
   onChange,
@@ -21,7 +21,10 @@ export function HolidayTypeSelectField({
         styles={colourStyles}
         placeholder="Select holiday type..."
         options={holidayTypeOptions}
-        onChange={(newValue) => onChange(newValue as HolidayType[])}
+        onChange={(newValue) => {
+          console.log(newValue);
+          onChange(newValue as HolidayType[]);
+        }}
       />
     </Wrapper>
   );

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query-devtools": "^4.3.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,20 +14,23 @@
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",
     "chroma-js": "^2.4.2",
-    "eslint": "8.22.0",
+    "jest": "29.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2",
     "react-scripts": "5.0.1",
     "react-select": "^5.4.0",
     "styled-components": "^5.3.5",
+    "ts-jest": "^29.0.3",
     "typescript": "^4.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "DEBUG=eslint:cli-engine eslint './src/**/*.{tsx,ts,js}'",
+    "lint-fix": "DEBUG=eslint:cli-engine eslint './src/**/*.{tsx,ts,js}' --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -47,8 +51,21 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "eslint": "8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-unused-imports": "^2.0.0"
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-testing-library": "^5.9.1",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "jest-fetch-mock": "^3.0.3",
+    "jest-styled-components": "^7.1.1"
   }
 }

@@ -15,7 +15,7 @@ export function ApiKeyInputField({
       const storedApiKey = localStorage.getItem("apiKey");
       if (storedApiKey) onChange(storedApiKey);
     }
-  }, [onChange]);
+  }, [onChange, apiKey]);
 
   return (
     <Wrapper>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { supportedCountryNames } from "../../shared/supportedCountries";
+import { getCountryCode, inputIsValid } from "./CountryInputField.helpers";
 import { CountryInputFieldStyled, Wrapper } from "./CountryInputField.styled";
 import { AutocompleteState } from "./CountryInputField.types";
-import { getCountryCode, inputIsValid } from "./CountryInputField.helpers";
 import { SuggestionsList } from "./SuggestionsList";
 
 export function CountryInputField({

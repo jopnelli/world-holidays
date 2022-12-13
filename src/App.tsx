@@ -1,14 +1,12 @@
-import React from "react";
-import { HolidayTable } from "./components/HolidayTable/HolidayTable";
+import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import styled from "styled-components";
-import { useState } from "react";
+import { ApiKeyInputField } from "./components/ApiKeyInputField/ApiKeyInputField";
 import { CountryInputField } from "./components/CountryInputField/CountryInputField";
+import { HolidayTable } from "./components/HolidayTable/HolidayTable";
 import { HolidayType } from "./components/HolidayTable/HolidayTable.types";
 import { HolidayTypeSelectField } from "./components/HolidayTypeSelectField/HolidayTypeSelectField";
-import { ApiKeyInputField } from "./components/ApiKeyInputField/ApiKeyInputField";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { ThemeSwitchButton } from "./components/ThemeSwitchButton/ThemeSwitchButton";
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
@@ -35,7 +33,7 @@ export default function App() {
               onChange={(input) => setSelectedHolidayType(input)}
             />
 
-            {/*<ThemeSwitchButton />*/}
+            {/* <ThemeSwitchButton /> */}
           </HolidayTableControlsWrapper>
         </HeaderStyled>
 
